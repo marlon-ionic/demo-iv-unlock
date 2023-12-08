@@ -6,6 +6,10 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #container strong {

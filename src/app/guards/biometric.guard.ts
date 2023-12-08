@@ -10,7 +10,9 @@ export class BiometricGuard implements CanActivate {
   async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean | UrlTree> {
+      console.log('BiometricGuard.canActivate');
       await this.vaultService.lock();
+      console.log('BiometricGuard.canActivate - vault locked');
     return true;
   }
 

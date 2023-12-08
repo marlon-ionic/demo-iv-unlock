@@ -1,6 +1,19 @@
 .main {
   display: flex;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+
+.state {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  gap: 0.5rem;
 }

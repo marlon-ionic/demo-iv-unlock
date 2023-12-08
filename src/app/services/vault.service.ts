@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { BrowserVault, DeviceSecurityType, IdentityVaultConfig, Vault, VaultType } from '@ionic-enterprise/identity-vault';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VaultService {
-
+  private isLockedSubject = new BehaviorSubject<boolean>(false);
+  isLocked$ = this.isLockedSubject.asObservable();
   private vault?: Vault | BrowserVault;
-  constructor() { }
+  constructor(private readonly zone: NgZone) { }
 
 
   async init() {
@@ -25,6 +27,28 @@ export class VaultService {
     // Per https://ionic.io/docs/identity-vault/troubleshooting#use-initialize (initialize() available since 5.11.0)
     this.vault = isNativePlatform ? new Vault() : new BrowserVault();
     await this.vault?.initialize(config);
+
+    this.vault?.onLock(() => {
+      console.log('Vault locked');
+      this.zone.run(() => {
+        this.isLockedSubject.next(true);
+      });
+    });
+    this.vault?.onUnlock(() => {
+      console.log('Vault unlocked');
+      this.zone.run(() => {
+        this.isLockedSubject.next(false);
+      });
+    });
+    this.vault?.onError((e) => {
+      console.warn('Vault error', e);
+    });
+  }
+
+  async isLocked(): Promise<boolean> {
+    this.checkForVault();
+    const isLocked = await this.vault?.isLocked();
+    return isLocked ?? false;
   }
 
   async clear() {

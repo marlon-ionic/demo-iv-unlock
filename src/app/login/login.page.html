@@ -11,6 +11,11 @@
     </ion-toolbar>
   </ion-header>
   <section class="main">
-    <ion-button expand="block" (click)="unlock()">Unlock</ion-button>
+    <ion-button (click)="unlock()">Unlock</ion-button>
+    <div class="state">
+      <ion-label>Vault Status: {{vaultStatus}}</ion-label>
+      <ion-button *ngIf="vaultStatus !== 'locked'" (click)="lock()" color="danger">Lock</ion-button>
+    </div>
+    <ion-button routerLink="/home" color="secondary">Home</ion-button>
   </section>
 </ion-content>
