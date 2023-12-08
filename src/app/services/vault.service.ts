@@ -22,7 +22,7 @@ export class VaultService {
       unlockVaultOnLoad: false,
     };
 
-    // Per https://ionic.io/docs/identity-vault/troubleshooting#use-initialize (Since 5.11.0)
+    // Per https://ionic.io/docs/identity-vault/troubleshooting#use-initialize (initialize() available since 5.11.0)
     this.vault = isNativePlatform ? new Vault() : new BrowserVault();
     await this.vault?.initialize(config);
   }
